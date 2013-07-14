@@ -1,8 +1,4 @@
-begin
-  require 'pygments.rb'
-rescue LoadError
-  # Doesn't have pygments.rb installed
-end
+require 'peek/rblineprof/syntax_highlighter'
 
 module Peek
   module Rblineprof
@@ -15,13 +11,9 @@ module Peek
 
       protected
 
-      def pygmentize?
-        defined?(Pygments)
-      end
-
-      def pygmentize(file_name, code, lexer = nil)
-        if pygmentize? && lexer.present?
-          Pygments.highlight(code, :lexer => lexer_for_filename(file_name))
+      def pygmentize(file_name, code, lexer = false)
+        if lexer
+          SyntaxHighlighter.pygmentize(code, lexer_for_filename(file_name))
         else
           code
         end
@@ -33,8 +25,8 @@ module Peek
 
       def lexer_for_filename(file_name)
         case file_name
-        when /\.rb$/ then 'ruby'
-        when /\.erb$/ then 'erb'
+        when /\.rb$/  then :ruby
+        when /\.erb$/ then :erb
         end
       end
 
@@ -120,7 +112,7 @@ module Peek
               end
             end
             output << "<pre class='duration'>#{times.join("\n")}</pre>"
-            output << "<div class='code'>#{pygmentize(file_name, code.join, 'ruby')}</div>"
+            output << "<div class='code'>#{pygmentize(file_name, code.join, true)}</div>"
             output << "</div></div>" # .data then .peek-rblineprof-file
           end
 
