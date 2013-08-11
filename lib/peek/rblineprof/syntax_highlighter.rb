@@ -4,7 +4,7 @@ require 'peek/rblineprof/highlighters/rouge_highlighter.rb'
 module Peek
   module Rblineprof
     class SyntaxHighlighter
-      def self.pygmentize(code, lexer)
+      def self.highlight(code, lexer)
         return code unless highlighter
 
         highlighter.process(code, lexer)

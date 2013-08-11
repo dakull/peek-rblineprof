@@ -11,9 +11,9 @@ module Peek
 
       protected
 
-      def pygmentize(file_name, code, lexer = false)
+      def highlight(file_name, code, lexer = false)
         if lexer
-          SyntaxHighlighter.pygmentize(code, lexer_for_filename(file_name))
+          SyntaxHighlighter.highlight(code, lexer_for_filename(file_name))
         else
           code
         end
@@ -112,7 +112,7 @@ module Peek
               end
             end
             output << "<pre class='duration'>#{times.join("\n")}</pre>"
-            output << "<div class='code'>#{pygmentize(file_name, code.join, true)}</div>"
+            output << "<div class='code'>#{highlight(file_name, code.join, true)}</div>"
             output << "</div></div>" # .data then .peek-rblineprof-file
           end
 
