@@ -4,30 +4,34 @@ require 'peek/rblineprof/highlighters/rouge_highlighter.rb'
 module Peek
   module Rblineprof
     class SyntaxHighlighter
+      class_attribute :highlighter
+
       def self.highlight(code, lexer)
         return code unless highlighter
 
         highlighter.process(code, lexer)
       end
+    end
+  end
+end
 
-      private
+module Peek
+  module Rblineprof
+    begin
+      require 'pygments.rb'
 
-      def self.highlighter
-        @highlighter ||= -> {
-          begin
-            require 'pygments.rb'
-            return PygmentsHighlither
-          rescue LoadError
-            # Doesn't have pygments.rb installed
-          end
+      SyntaxHighlighter.highlighter = PygmentsHighlighter
+    rescue LoadError
+      # Doesn't have pygments.rb installed
+    end
 
-          begin
-            require 'rouge'
-            return RougeHighlighter
-          rescue LoadError
-            # Doesn't have rouge installed
-          end
-        }.call
+    if SyntaxHighlighter.highlighter.nil?
+      begin
+        require 'rouge'
+
+        SyntaxHighlighter.highlighter = RougeHighlighter
+      rescue LoadError
+        # Doesn't have rouge installed
       end
     end
   end

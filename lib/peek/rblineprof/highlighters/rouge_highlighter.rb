@@ -10,13 +10,13 @@ module Peek
         formatter.format(lexer.new.lex(code))
       end
 
-      def find_lexer(lexer)
+      def self.find_lexer(lexer)
         lexers = {
-          :ruby => Rouge::Lexers::Ruby,
-          :erb  => Rouge::Lexers::ERB
+          ruby: Rouge::Lexers::Ruby,
+          erb:  Rouge::Lexers::ERB
         }
 
-        lexers.fetch(lexers.to_sym, :no_lexer)
+        lexers.fetch(lexer.to_sym, :no_lexer)
       end
     end
   end
