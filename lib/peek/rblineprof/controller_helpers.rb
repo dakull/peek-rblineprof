@@ -1,12 +1,14 @@
 require 'peek/rblineprof/syntax_highlighter'
 
+require 'rack/utils'
+
 module Peek
   module Rblineprof
     module ControllerHelpers
       extend ActiveSupport::Concern
 
       included do
-        around_filter :inject_rblineprof, :if => [:peek_enabled?, :rblineprof_enabled?]
+        around_action :inject_rblineprof, :if => [:peek_enabled?, :rblineprof_enabled?]
       end
 
       protected
@@ -15,7 +17,7 @@ module Peek
         if lexer
           SyntaxHighlighter.highlight(code, lexer_for_filename(file_name))
         else
-          code
+          "<pre>#{Rack::Utils.escape_html(code)}</pre>"
         end
       end
 
@@ -112,7 +114,7 @@ module Peek
               end
             end
             output << "<pre class='duration'>#{times.join("\n")}</pre>"
-            output << "<div class='code'>#{highlight(file_name, code.join, true)}</div>"
+            output << "<pre class='code highlight'>#{highlight(file_name, code.join, true)}</pre>"
             output << "</div></div>" # .data then .peek-rblineprof-file
           end
 
