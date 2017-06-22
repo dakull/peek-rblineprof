@@ -1,5 +1,5 @@
-require 'peek/rblineprof/highlighters/pygments_highlighter.rb'
-require 'peek/rblineprof/highlighters/rouge_highlighter.rb'
+require 'peek/rblineprof/highlighters/pygments_highlighter'
+require 'peek/rblineprof/highlighters/rouge_highlighter'
 
 module Peek
   module Rblineprof
